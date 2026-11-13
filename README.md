@@ -7,7 +7,7 @@ Este repositorio reúne la identidad visual de la UIFCE y de sus siete áreas: l
 1. **Comunicar mejor entre áreas.** Todas usan la misma marca, el mismo discurso y el mismo procedimiento para pedirse trabajo.
 2. **Vender cada área a su público.** Cada área tiene una propuesta de valor, una página y una ficha de una hoja que puede enviar o imprimir.
 
-> Abre `index.html` en el navegador o, si está activado GitHub Pages, la URL del sitio. Desde ahí se llega al portafolio, al manual y a las descargas.
+> **Sitio publicado:** https://cdiazsu-source.github.io/ET---NuevosLogosUIFCE-Ruletas/. Desde ahí se llega al portafolio, al manual y a las descargas. También puedes abrir `index.html` directamente.
 
 ## Público de cada área
 
@@ -80,7 +80,7 @@ npx remotion studio     # editor visual
 
 ## Publicar el sitio
 
-En GitHub, entra a **Settings → Pages**, elige **Deploy from a branch**, la rama `main` y la carpeta `/ (root)`. El sitio queda en `https://<usuario>.github.io/<repositorio>/`.
+El sitio se publica solo con GitHub Pages (rama `main`, carpeta `/ (root)`) cada vez que se sube un cambio a `main`. El archivo `.nojekyll` hace que GitHub sirva los archivos tal cual, sin pasarlos por Jekyll.
 
 ## Pendientes
 
