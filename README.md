@@ -38,6 +38,7 @@ Todo el contenido comercial (lemas, propuestas, servicios, pasos y llamados a la
 | [`media/areas/<área>/`](media/areas/) | Animación del logo de cada área |
 | [`media/ruleta/<área>/`](media/ruleta/) | Ruleta junto al logotipo, que se detiene en cada área |
 | [`media/unidad-estrategias/`](media/unidad-estrategias/) | Animación de la Unidad enlazada con la ruleta de Estrategias Tecnológicas; el punto de la «i» se ilumina junto con el área |
+| [`media/unidad-recorrido/`](media/unidad-recorrido/) | Versión larga (44 s): de la Unidad pasa a la ruleta y recorre las 7 áreas, de Estrategias Tecnológicas a Coordinación |
 | [`animacion/`](animacion/) | Código fuente de todas las animaciones (Remotion + GSAP) |
 | [`archivo/propuestas/`](archivo/propuestas/) | Exploraciones de diseño anteriores |
 
@@ -75,6 +76,7 @@ npm install
 npm run render:areas    # animación del logo de cada área
 npm run render:reel     # ruletas de las 7 áreas (unos 3 min por área)
 npm run render:unidad   # Unidad → Estrategias Tecnológicas
+npm run render:recorrido # Unidad → recorrido por las 7 áreas (versión larga)
 npx remotion studio     # editor visual
 ```
 

@@ -16,6 +16,9 @@ const COMPS: { id: string; variant: Variant }[] = [
 ];
 const AREA_VARIANTS: Variant[] = ["lavanda", "lavandaGif", "blanco", "negro", "transparente"];
 const REEL_VARIANTS: Variant[] = ["lavanda", "lavandaGif", "blanco", "negro", "transparente"];
+// reel order after Estrategias Tecnológicas (each segment starts exactly where the previous one landed)
+const TOUR = ["apoyos-academicos", "gestion-del-conocimiento", "desarrollo-automatizaciones-ti",
+  "virtualizacion-academica", "cursos-libres", "coordinacion"] as const;
 const common = { durationInFrames: 150, fps: 30, width: 1920, height: 1080 };
 
 export const RemotionRoot: React.FC = () => (
@@ -38,6 +41,11 @@ export const RemotionRoot: React.FC = () => (
     {REEL_VARIANTS.map((variant) => (
       <Composition key={`unidad-${variant}`} id={`UnidadEstrategias-${variant}`} component={UnidadAreaScene}
         defaultProps={{ area: "estrategias-tecnologicas" as const, variant }} {...common} durationInFrames={unidadDuration(30)} />
+    ))}
+    {/* long version: after Estrategias Tecnológicas the reel visits every other area in reel order */}
+    {REEL_VARIANTS.map((variant) => (
+      <Composition key={`recorrido-${variant}`} id={`UnidadRecorrido-${variant}`} component={UnidadAreaScene}
+        defaultProps={{ area: "estrategias-tecnologicas" as const, variant, tour: TOUR }} {...common} durationInFrames={unidadDuration(30, TOUR.length)} />
     ))}
     {/* one composition per area and colour version, e.g. Area-cursos-libres-negro */}
     {AREA_SLUGS.flatMap((area) =>

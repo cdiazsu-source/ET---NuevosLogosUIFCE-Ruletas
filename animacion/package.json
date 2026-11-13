@@ -15,7 +15,8 @@
     "render:slot-logo:mov": "remotion render src/index.ts SlotReelLogo out/slot-reel/uifce-slot-reel-logo-transparente.mov --codec prores --prores-profile 4444 --image-format png --pixel-format yuva444p10le --overwrite",
     "render:reel": "bash scripts/render-reel.sh",
     "gif:reel": "bash scripts/gif-reel.sh",
-    "render:unidad": "bash scripts/render-unidad.sh"
+    "render:unidad": "bash scripts/render-unidad.sh",
+    "render:recorrido": "bash scripts/render-recorrido.sh"
   },
   "dependencies": {
     "@remotion/cli": "4.0.543",

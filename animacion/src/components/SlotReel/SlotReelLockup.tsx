@@ -35,6 +35,9 @@ const BY0 = YC - WIN_HALF - 20, BH = 2 * (WIN_HALF + 20);
 const I_D = logo.wordmark[1].d, I_SPLIT = I_D.indexOf("M", 1);
 const DOT_D = I_D.slice(0, I_SPLIT), STEM_D = I_D.slice(I_SPLIT);
 
+/** Horizontal offset that centres the final lockup of `area` (logo units). */
+export const lockupBX0 = (area: Slug) => RIGHTS[Math.max(0, SLUGS.indexOf(area))] / 2 - HALF_W;
+
 /** Where logo unit (0,0) lands and how many px one unit measures, for a lockup filling a W×H frame. */
 export function lockupUnitMap(area: Slug, W: number, H: number) {
   const target = Math.max(0, SLUGS.indexOf(area));
@@ -51,11 +54,15 @@ export const SlotReelLockup: React.FC<{
   reelIn?: number;
   /** glow colours [soft, deep] — defaults to lavanda + azul */
   glowColors?: [string, string];
-}> = ({ time, ink = COLORS.ink, area = SLUGS[0], style, dotGlow = false, reelIn = 1, glowColors = [COLORS.glowSoft, COLORS.glowDeep] }) => {
+  /** chained tour: start from a landed reel (neighbours hidden) */
+  fromLanded?: boolean;
+  /** horizontal framing override (logo units), to glide between two areas' centring */
+  bx0?: number;
+}> = ({ time, ink = COLORS.ink, area = SLUGS[0], style, dotGlow = false, reelIn = 1, glowColors = [COLORS.glowSoft, COLORS.glowDeep], fromLanded = false, bx0 }) => {
   const target = Math.max(0, SLUGS.indexOf(area));
-  const BX0 = RIGHTS[target] / 2 - HALF_W;          // centre the final lockup of this area
+  const BX0 = bx0 ?? RIGHTS[target] / 2 - HALF_W;   // centre the final lockup of this area
   const state = useRef<LockupState>({ angle: 0, blur: 0, hl: 0, glow: 0, dot: 1 }).current;
-  const tl = useMemo(() => buildLockupTimeline(state, target), [state, target]);
+  const tl = useMemo(() => buildLockupTimeline(state, target, fromLanded), [state, target, fromLanded]);
   const [, force] = useState(0);
   const filterId = useId().replace(/:/g, "");
 
@@ -119,6 +126,11 @@ export const SlotReelLockup: React.FC<{
           <div style={{ position: "absolute", inset: 0, perspective: u(R * 4), perspectiveOrigin: "35% 50%" }}>
             {FACES.map((_, i) => {
               const f = faceLayout(i, state, { fadeTo: 0, grow: 0, target });
+              // chained tour: the area that just landed (previous in the list) stays fully visible while centred
+              if (fromLanded && i % SLUGS.length === (target + SLUGS.length - 1) % SLUGS.length && Math.abs(f.rel) < 180 / FACES.length) {
+                const facing = Math.cos((f.rel * Math.PI) / 180);
+                f.opacity = facing <= 0 ? 0 : Math.pow(facing, 1.6);
+              }
               if (!f.visible || f.opacity < 0.003) return null;
               const a = areaData.areas[SLUGS[i % SLUGS.length]];
               const glow = f.isWinner ? state.glow : 0;

@@ -67,9 +67,15 @@ export type LockupState = ReelState & { glow: number; dot: number };
 // i-dot pulse (only drawn when the lockup is asked for it): starts a few frames after the name lights up
 export const T_DOT = { start: T.highlight + 0.09, peak: T.highlight + 0.33 };
 
-export function buildLockupTimeline(state: LockupState, target: number = TARGET) {
+/** `fromLanded`: the segment follows another landing (chained tour) — it starts with the neighbours
+ *  hidden, exactly as the previous segment ended, and fades them back in during the rest phase. */
+export function buildLockupTimeline(state: LockupState, target: number = TARGET, fromLanded = false) {
   state.glow = 0; state.dot = 1;
   const tl = spin(state, target);
+  if (fromLanded) {
+    state.hl = 1;
+    tl.to(state, { hl: 0, duration: T.accel - 0.05, ease: "power2.inOut" }, 0.05);
+  }
   tl.to(state, { dot: 1.12, duration: T_DOT.peak - T_DOT.start, ease: "power2.out" }, T_DOT.start)
     .to(state, { dot: 1, duration: T_LOCKUP.settle - T_DOT.peak, ease: "elastic.out(1, 0.45)" }, T_DOT.peak);
   tl.to(state, { hl: 1, duration: 0.7, ease: "power2.out" }, T.highlight)                       // neighbours → 0
