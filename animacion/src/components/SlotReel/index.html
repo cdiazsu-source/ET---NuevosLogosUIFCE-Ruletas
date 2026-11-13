@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UIFCE Slot Reel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+<style>
+  /* Local copy of Roboto Medium (Apache 2.0) — used when the page is served over http(s). */
+  @font-face { font-family: "Roboto UIFCE"; src: url("./assets/Roboto-Medium.ttf") format("truetype"); font-weight: 500; }
+
+  :root {
+    --ink: #FFFFFF;
+    --glow-soft: #C1C6E4;   /* lavanda UIFCE */
+    --glow-deep: #49689F;   /* azul áreas UIFCE */
+    --rule: rgba(193, 198, 228, 0.55);
+    --slot: 12vh;           /* slot height — everything scales with the viewport */
+    --backdrop: #262E6B;    /* PREVIEW ONLY; the reel itself is transparent */
+  }
+  html, body { margin: 0; height: 100%; background: var(--backdrop); overflow: hidden; }
+  body.transparent { --backdrop: transparent; }
+
+  /* ===== component: transparent background ===== */
+  #slot-reel {
+    position: relative; width: 100vw; height: 100vh; background: transparent; cursor: pointer;
+    font-family: "Roboto UIFCE", Roboto, "Segoe UI", sans-serif; font-weight: 500; color: var(--ink);
+    user-select: none;
+  }
+  .logo {
+    position: absolute; left: 50%; top: 7vh; height: min(15vh, 22vw); transform: translateX(-50%);
+    animation: float 3.4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+    50%      { transform: translateX(-50%) translateY(-0.9vh) scale(1.01); }
+  }
+  .window {
+    position: absolute; left: 5vw; right: 5vw;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);
+  }
+  .stage { position: absolute; inset: 0; perspective: 110vh; }
+  .face {
+    position: absolute; left: 0; right: 0; top: 50%; height: var(--slot); margin-top: calc(var(--slot) / -2);
+    display: flex; align-items: center; justify-content: center; white-space: nowrap;
+    font-size: min(6.2vh, 4.4vw);   /* height-driven, capped so the longest name fits narrow screens */ letter-spacing: -0.01em; backface-visibility: hidden; will-change: transform, opacity;
+  }
+  .rule {
+    position: absolute; left: 18vw; right: 18vw; height: 0.25vh;
+    background: linear-gradient(90deg, transparent, var(--rule) 20%, var(--rule) 80%, transparent);
+  }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  /* ===== preview controls (not part of the component) ===== */
+  .controls {
+    position: fixed; left: 50%; bottom: 2vh; transform: translateX(-50%); display: flex; gap: 8px;
+    font: 13px/1 system-ui, sans-serif;
+  }
+  .controls button {
+    border: 1px solid rgba(255,255,255,.35); background: rgba(0,0,0,.35); color: #fff;
+    padding: 8px 12px; border-radius: 999px; cursor: pointer;
+  }
+  .controls button:hover { background: rgba(0,0,0,.6); }
+  body.clean .controls { display: none; }
+  @media (prefers-reduced-motion: reduce) { .logo { animation: none; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- vertical-only motion blur: CSS blur() can't be directional -->
+  <filter id="vblur" x="-5%" y="-20%" width="110%" height="140%">
+    <feGaussianBlur id="vblur-amount" stdDeviation="0 0"/>
+  </filter>
+</svg>
+
+<div id="slot-reel" role="img" aria-label="UIFCE: ruleta de áreas que se detiene en Estrategias Tecnológicas">
+  <!-- logo: inlined copy of ./assets/uifce-logo.svg (works offline, in OBS and inside other pages) -->
+  <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 8 1200 347" role="img" aria-label="UIFCE"><title>UIFCE</title><path fill="#FFFFFF" d="M208.63 297.53Q193.23 324.19 169.08 338.6Q144.93 353 113.22 353Q59.78 353 29.89 318.38Q0 283.75 0 210.51L0 15L59.48 15L59.48 211.12Q59.48 264.13 74.88 284.05Q90.28 303.97 122.89 303.97Q154.59 303.97 175.27 290.95Q195.95 277.92 206.52 254.02L206.52 15L266 15L266 346.56L212.56 346.56L208.63 297.53ZM336.20 15H373.55Q383.55 15 383.55 25V62Q383.55 72 373.55 72H336.20Q326.20 72 326.20 62V25Q326.20 15 336.20 15ZM335.20 101H374.55Q383.55 101 383.55 110V347H326.20V110Q326.20 101 335.20 101ZM641.29 206.31L506.98 206.31L506.98 347L449 347L449 15L661 15L661 61.52L506.98 61.52L506.98 160.25L641.29 160.25L641.29 206.31ZM943 239.07Q937.98 292.33 903.75 322.16Q869.53 352 812.71 352Q773.01 352 742.77 333.14Q712.54 314.28 696.11 279.53Q679.68 244.78 679 198.83L679 167.74Q679 120.65 695.65 84.75Q712.31 48.86 743.46 29.43Q774.61 10 815.45 10Q870.44 10 903.98 39.95Q937.52 69.9 943 124.53L885.5 124.53Q881.39 88.64 864.62 72.75Q847.85 56.86 815.45 56.86Q777.8 56.86 757.61 84.41Q737.41 111.96 736.96 165.23L736.96 194.72Q736.96 248.67 756.24 277.01Q775.52 305.36 812.71 305.36Q846.71 305.36 863.83 290.05Q880.94 274.73 885.5 239.07L943 239.07ZM1176.98 198.79L1040.67 198.79L1040.67 300.94L1200 300.94L1200 347L983 347L983 15L1198.4 15L1198.4 61.52L1040.67 61.52L1040.67 153.18L1176.98 153.18L1176.98 198.79Z"/></svg>
+  <div class="window" id="window"><div class="stage" id="stage"></div></div>
+  <div class="rule" id="rule-top"></div>
+  <div class="rule" id="rule-bottom"></div>
+  <span class="sr-only">Área seleccionada: Estrategias Tecnológicas</span>
+</div>
+
+<div class="controls">
+  <button id="replay">↻ Repetir</button>
+  <button data-bg="#262E6B">Índigo</button>
+  <button data-bg="#C1C6E4">Lavanda</button>
+  <button data-bg="#000000">Negro</button>
+  <button data-bg="transparent">Transparente</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+/* Mirrors src/components/SlotReel/reel.ts — keep both in sync. */
+const AREAS = [
+  "Estrategias Tecnológicas", "Apoyos Académicos", "Gestión del Conocimiento",
+  "Desarrollo & Automatizaciones TI", "Virtualización Académica", "Cursos Libres", "Coordinación",
+];
+const TARGET = 0, START = 6;
+const FACES = [...AREAS, ...AREAS];
+const STEP = 360 / FACES.length;
+const T = { accel: 0.5, decel: 1.2, snap: 3.0, highlight: 3.6, end: 4.5, total: 5.0 };
+const SLOT_VH = 12;
+const R_VH = SLOT_VH / 2 / Math.tan((STEP / 2) * Math.PI / 180);   // drum radius
+const CENTER_VH = 60;
+
+const params = new URLSearchParams(location.search);
+if (params.get("bg") === "transparent") document.body.classList.add("transparent");
+if (params.has("clean")) document.body.classList.add("clean");   // ?clean&bg=transparent → OBS browser source
+
+const win = document.getElementById("window");
+win.style.top = (CENTER_VH - R_VH) + "vh";
+win.style.height = (2 * R_VH) + "vh";
+const stage = document.getElementById("stage");
+const faces = FACES.map((name) => {
+  const el = document.createElement("div"); el.className = "face"; el.textContent = name; stage.appendChild(el); return el;
+});
+const ruleTop = document.getElementById("rule-top"), ruleBottom = document.getElementById("rule-bottom");
+const blurNode = document.getElementById("vblur-amount");
+
+const state = { angle: 0, blur: 0, hl: 0 };
+
+function render() {
+  blurNode.setAttribute("stdDeviation", `0 ${state.blur.toFixed(2)}`);
+  win.style.filter = state.blur > 0.05 ? "url(#vblur)" : "none";
+  faces.forEach((el, i) => {
+    let rel = i * STEP - state.angle;
+    rel = ((rel % 360) + 540) % 360 - 180;
+    const facing = Math.cos(rel * Math.PI / 180);
+    if (facing <= 0.02) { el.style.visibility = "hidden"; return; }
+    el.style.visibility = "visible";
+    const isWinner = i % AREAS.length === TARGET && Math.abs(rel) < STEP / 2;
+    const base = Math.pow(facing, 1.6);
+    const scale = isWinner ? 1 + 0.15 * state.hl : 1;
+    el.style.opacity = isWinner ? base : base * (1 - 0.7 * state.hl);
+    el.style.transform = `rotateX(${rel}deg) translateZ(${R_VH}vh) scale(${scale})`;
+    el.style.textShadow = isWinner && state.hl > 0
+      ? `0 0 ${1.1 * state.hl}vh var(--glow-soft), 0 0 ${3.2 * state.hl}vh var(--glow-deep), 0 0 ${6 * state.hl}vh rgba(73,104,159,.53)`
+      : "none";
+  });
+  const gap = (SLOT_VH / 2) * (1 + 0.15 * state.hl);
+  ruleTop.style.top = (CENTER_VH - gap) + "vh";
+  ruleBottom.style.top = (CENTER_VH + gap) + "vh";
+}
+
+function buildTimeline() {
+  const S = START * STEP;
+  const F = 3 * 360 + TARGET * STEP;
+  const preSnap = F - 0.5 * STEP;
+  const dur2 = T.decel - T.accel, dur3 = T.snap - T.decel;
+  const a = (preSnap - S) / (1 + (2 * dur3) / (4 * dur2));   // speed continuous at 1.2 s
+  state.angle = S; state.blur = 0; state.hl = 0;
+  return gsap.timeline({ paused: true, onUpdate: render })
+    .to(state, { angle: S + a, duration: dur2, ease: "power2.in" }, T.accel)           // 2 · aceleración
+    .to(state, { blur: 8, duration: dur2, ease: "power2.in" }, T.accel)
+    .to(state, { angle: preSnap, duration: dur3, ease: "power4.out" }, T.decel)        // 3 · inercia
+    .to(state, { blur: 0, duration: dur3 * 0.75, ease: "power2.out" }, T.decel)
+    .to(state, { angle: F, duration: T.highlight - T.snap, ease: "back.out(1.7)" }, T.snap) // 4 · anclaje
+    .to(state, { hl: 1, duration: T.end - T.highlight, ease: "power3.out" }, T.highlight)    // 5 · destaque
+    .to({}, { duration: T.total - T.end }, T.end);
+}
+
+const tl = buildTimeline();
+render();
+const play = () => tl.restart();
+document.getElementById("slot-reel").addEventListener("click", play);
+document.getElementById("replay").addEventListener("click", play);
+document.querySelectorAll("[data-bg]").forEach((b) =>
+  b.addEventListener("click", () => document.body.style.setProperty("--backdrop", b.dataset.bg)));
+if (matchMedia("(prefers-reduced-motion: reduce)").matches) tl.progress(1); else setTimeout(play, 300);
+</script>
+</body>
+</html>

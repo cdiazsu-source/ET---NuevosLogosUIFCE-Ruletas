@@ -1,0 +1,6 @@
+node_modules/
+animacion/out/
+*.mov
+.DS_Store
+Thumbs.db
+desktop.ini

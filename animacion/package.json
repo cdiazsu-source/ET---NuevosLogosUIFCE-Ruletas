@@ -1,0 +1,32 @@
+{
+  "name": "uifce-logo-animacion",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "sfx": "node scripts/sfx.mjs",
+    "render": "remotion render src/index.ts UifceLogo out/uifce-logo-animacion.mp4 --codec h264 --crf 16 --overwrite",
+    "render:areas": "bash scripts/render-areas.sh",
+    "render:slot": "remotion render src/index.ts SlotReel out/slot-reel/uifce-slot-reel-transparente.webm --codec vp9 --image-format png --pixel-format yuva420p --overwrite",
+    "render:slot:mov": "remotion render src/index.ts SlotReel out/slot-reel/uifce-slot-reel-transparente.mov --codec prores --prores-profile 4444 --image-format png --pixel-format yuva444p10le --overwrite",
+    "build:web": "node scripts/build-web.mjs",
+    "gif:areas": "bash scripts/gif-areas.sh",
+    "render:slot-logo": "remotion render src/index.ts SlotReelLogo out/slot-reel/uifce-slot-reel-logo-transparente.webm --codec vp9 --image-format png --pixel-format yuva420p --overwrite",
+    "render:slot-logo:mov": "remotion render src/index.ts SlotReelLogo out/slot-reel/uifce-slot-reel-logo-transparente.mov --codec prores --prores-profile 4444 --image-format png --pixel-format yuva444p10le --overwrite",
+    "render:reel": "bash scripts/render-reel.sh",
+    "gif:reel": "bash scripts/gif-reel.sh",
+    "render:unidad": "bash scripts/render-unidad.sh"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.543",
+    "gsap": "3.15.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.543"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^7.0.2"
+  }
+}
